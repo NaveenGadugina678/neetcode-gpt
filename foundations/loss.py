@@ -1,0 +1,36 @@
+import numpy as np
+from numpy.typing import NDArray
+
+
+class Solution:
+
+    def binary_cross_entropy(self, y_true: NDArray[np.float64], y_pred: NDArray[np.float64]) -> float:
+        # y_true: true labels (0 or 1)
+        # y_pred: predicted probabilities
+        # Hint: add a small epsilon (1e-7) to y_pred to avoid log(0)
+        # return round(your_answer, 4)
+        pass
+        L = 0
+        for i in range(len(y_true)):
+            L += (y_true[i] * np.log(y_pred[i])) + ((1-y_true[i]) * np.log(1 - y_pred[i]))
+
+        L = (-1/len(y_true)) * L
+        return float(np.round(L, 4))
+
+    def categorical_cross_entropy(self, y_true: NDArray[np.float64], y_pred: NDArray[np.float64]) -> float:
+        # y_true: one-hot encoded true labels (shape: n_samples x n_classes)
+        # y_pred: predicted probabilities (shape: n_samples x n_classes)
+        # Hint: add a small epsilon (1e-7) to y_pred to avoid log(0)
+        # return round(your_answer, 4)
+        epsilon = 1e-7
+        y_pred = np.clip(y_pred, epsilon, 1 - epsilon)
+        L = 0
+
+        for i in range(len(y_true)):
+            l = 0
+            for j in range(len(y_pred[0])):
+                l += y_true[i][j] * np.log(y_pred[i][j])
+
+            L += l
+        L = (-1/len(y_true)) * L
+        return float(np.round(L, 4))
